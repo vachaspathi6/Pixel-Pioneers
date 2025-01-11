@@ -1,0 +1,118 @@
+Selected for onsite hackathon from MetLife:
+
+Problem statement: Create Online Bus Ticket Reservation App
+
+Started to complete this project using spring boot 
+
+Structure : (Online Bus Ticket Reservation App) 
+
+Login page 
+
+select 
+
+Pending tasks:
+____________________
+
+Deployments :
+
+FROM openjdk:17-jdk-slim
+COPY target/OnlineBusReservationApp-0.0.1-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
+
+docker file front end:
+FROM node:16
+WORKDIR /app
+COPY . .
+RUN npm install
+RUN npm run build
+EXPOSE 3000
+CMD ["npm", "start"]
+
+
+docker-compose.yml
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: bus-reservation-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/busreservation
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: bus-reservation-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:15
+    container_name: bus-reservation-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: busreservation
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+
+
+Steps to Run Docker Compose
+Create a folder named backend and place your backend project files there.
+Create another folder named frontend for React code and the respective Dockerfile.
+Place the docker-compose.yml file in the root directory.
+Run the following commands:
+bash
+Copy code
+docker-compose build
+docker-compose up
+
+
+
+18. Documentation and Submission
+Design Diagram
+Include a high-level design diagram illustrating:
+
+Frontend-Backend Communication: Use REST API endpoints.
+Microservice Interactions: Depict individual services like User Service, Bus Service, Payment Service, etc.
+Database Schema: Show key tables and their relationships.
+GitHub/GitLab Repository
+Ensure the repository contains:
+
+README.md: Detailed project documentation with setup instructions.
+Backend Code: Organized by microservices.
+Frontend Code: React/Angular components and styling files.
+Docker Compose File: For deployment.
+Test Cases: Include JUnit tests and Postman collections.
+Demo Video
+If unable to provide a live demo, record a walkthrough video showing:
+
+User registration and login.
+Bus search and seat selection.
+Payment process and booking confirmation.
+Admin functionalities like adding/editing buses and managing schedules.
+19. Future Enhancements
+Mobile App: Extend the platform with a React Native or Flutter app for mobile users.
+Real-Time Seat Availability: Use WebSocket for live updates on seat availability.
+Analytics Dashboard: For admins to view metrics like booking trends, revenue, etc.
+Localization: Support multiple languages for broader accessibility.
+This completes the comprehensive project implementation and documentation for the Online Bus Ticket Reservation Application. Let me know if you need further assistance!
+
+
+
+
+
+
+
+
